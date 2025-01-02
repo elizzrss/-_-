@@ -1,0 +1,17 @@
+{
+	"name": "itrvb/less3",
+	"autoload": {
+		"psr-4": {
+			"less3\\": "src/"
+		}
+	},
+	"authors": [
+		{
+			"name": "elizzrss",
+			"email": "korolkova.elizaveta4@gmail.com"
+		}
+	],
+	"require": {
+		"fakerphp/faker": "^1.23"
+	}
+}
