@@ -4,6 +4,7 @@ use App\Interfaces\PostsRepositoryInterface;
 use PDO;
 use App\Post;
 use App\UUID;
+use App\Exceptions\PostNotFoundException;
 class PostsRepository implements PostsRepositoryInterface
 {
   public function __construct(
@@ -18,7 +19,7 @@ class PostsRepository implements PostsRepositoryInterface
       ':uuid' => (string)$post->getUuid(),
       ':author_uuid' => (string)$post->getAuthorUuid(),
       ':title' => $post->getTitle(),
-      ':text' => $post->getContent(),
+      ':text' => $post->getText(),
     ]);
   }
 
@@ -31,7 +32,7 @@ class PostsRepository implements PostsRepositoryInterface
     ]);
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     if ($result === false) {
-      throw new \Exception("Пост не найден: $uuid");
+      throw new PostNotFoundException("Пост не найден: $uuid");
     }
     return new Post(
       new Uuid($result['uuid']),
@@ -39,5 +40,19 @@ class PostsRepository implements PostsRepositoryInterface
       $result['title'],
       $result['text']
     );
+  }
+  public function delete(UUID $uuid): void
+  {
+    $statement = $this->connection->prepare(
+      'DELETE FROM posts WHERE uuid = :uuid'
+    );
+
+    $statement->execute([
+      ':uuid' => (string)$uuid,
+    ]);
+
+    if ($statement->rowCount() === 0) {
+      throw new PostNotFoundException("Пост не найден: $uuid");
+    }
   }
 }

@@ -16,4 +16,7 @@ class UUID
 
     public static function random(){
         return new self(uuid_create(UUID_TYPE_RANDOM));}
+
+    public static function isValid(string $uuid): bool{
+        return uuid_is_valid($uuid);}
 }

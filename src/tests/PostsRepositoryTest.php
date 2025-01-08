@@ -5,6 +5,7 @@ use App\Repositories\PostsRepository;
 use PHPUnit\Framework\TestCase;
 use PDO;
 use App\UUID;
+use App\Exceptions\PostNotFoundException;
 
 class PostsRepositoryTest extends TestCase
 {
@@ -13,14 +14,14 @@ class PostsRepositoryTest extends TestCase
   protected function setUp(): void
   {
     $this->pdo = new PDO('sqlite:' . __DIR__ . '/../../database.sqlite');
-    $this->pdo->exec('DELETE FROM posts WHERE uuid = "test_uuid"');
+    $this->pdo->exec('DELETE FROM posts');
     $this->repository = new PostsRepository($this->pdo);
   }
 
   public function testItSavesPostToRepository(): void
   {
-    $testUuid = new Uuid('00000000-0000-0000-0000-000000000001');
-    $authorUuid = new Uuid('00000000-0000-0000-0000-000000000002');
+    $testUuid = Uuid::random();
+    $authorUuid = Uuid::random();
     $post = new Post(
       $testUuid,
       $authorUuid,
@@ -52,14 +53,32 @@ class PostsRepositoryTest extends TestCase
     $this->assertEquals($uuid, $post->getUuid());
     $this->assertEquals($authorUuid, $post->getAuthorUuid());
     $this->assertEquals('Название', $post->getTitle());
-    $this->assertEquals('Текст', $post->getContent());
+    $this->assertEquals('Текст', $post->getText());
   }
 
   public function testItThrowsExceptionWhenPostNotFound(): void
   {
     $uuid = Uuid::random();
-    $this->expectException(\Exception::class);
+    $this->expectException(PostNotFoundException::class);
     $this->expectExceptionMessage("Пост не найден: $uuid");
     $this->repository->get($uuid);
+  }
+
+  public function testItDeletesPost(): void
+  {
+    $uuid = Uuid::random();
+    $authorUuid = Uuid::random();
+    $this->pdo->exec(
+      "INSERT INTO posts (uuid, author_uuid, title, text)
+         VALUES ('$uuid', '$authorUuid', 'Title', 'Text')"
+    );
+    $this->repository->delete($uuid);
+    $statement = $this->pdo->prepare(
+      'SELECT * FROM posts WHERE uuid = :uuid'
+    );
+    $statement->execute([
+      ':uuid' => (string)$uuid,
+    ]);
+    $this->assertFalse($statement->fetch());
   }
 }

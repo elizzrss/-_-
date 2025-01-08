@@ -7,7 +7,7 @@ class Post
         private UUID $authorUuid,
         private string $title,
         private string $text
-    ) {
+) {
     }
 
     public function getUuid(): UUID{
@@ -19,6 +19,6 @@ class Post
     public function getTitle(): string{
         return $this->title;}
 
-    public function getContent(): string{
+    public function getText(): string{
         return $this->text;}
 }
