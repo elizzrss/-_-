@@ -6,8 +6,7 @@ class Post
         private UUID $uuid,
         private UUID $authorUuid,
         private string $title,
-        private string $text
-) {
+        private string $text) {
     }
 
     public function getUuid(): UUID{

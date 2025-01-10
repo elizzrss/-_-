@@ -44,7 +44,7 @@ class CreatePostTest extends TestCase
   public function testItThrowsExceptionIfUserNotFound(): void
   {
     $stubs = $this->createStubs();
-	$authorUuid = Uuid::random();
+    $authorUuid = Uuid::random();
     $stubs['usersRepository']
       ->expects($this->once())
       ->method('get')

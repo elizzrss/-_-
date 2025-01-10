@@ -1,16 +1,17 @@
 <?php
 require 'vendor/autoload.php';
 use App\myHttp\Actions\Comments\CreateComment;
+use App\myHttp\Actions\Like\AddLike;
 use App\myHttp\Actions\Posts\CreatePost;
 use App\myHttp\Actions\Posts\DeletePost;
 use App\myHttp\Actions\Users\FindByUuid;
 use App\myHttp\ErrorResponse;
 use App\myHttp\Request;
 use App\Repositories\CommentsRepository;
+use App\Repositories\LikeRepository;
 use App\Repositories\PostsRepository;
 use App\Repositories\UsersRepository;
 use PDO;
-
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -40,6 +41,9 @@ $routes = [
         ),
         '/posts/create' => new CreatePost(
             new PostsRepository($pdo)
+        ),
+        '/posts/like' => new AddLike(
+            new LikeRepository($pdo)
         )
     ],
     'DELETE' => [

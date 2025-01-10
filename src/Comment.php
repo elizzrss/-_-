@@ -17,7 +17,7 @@ class Comment
 
     public function getAuthorUuid(): UUID{
         return $this->authorUuid;}
-
+		
     public function getText(): string{
         return $this->text;}
 }
