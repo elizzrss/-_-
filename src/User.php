@@ -11,18 +11,28 @@ class User
     ) {
     }
 
-    public function getUuid(): UUID{
-        return $this->uuid;}
+    public function getUuid(): UUID
+    {
+        return $this->uuid;
+    }
 
-    public function getAuthorUuid(): UUID{
-        return $this->authorUuid;}
+    public function getAuthorUuid(): UUID
+    {
+        return $this->authorUuid;
+    }
 
-    public function getNickname(): string{
-        return $this->nickname;}
+    public function getNickname(): string
+    {
+        return $this->nickname;
+    }
 
-    public function getFirstName(): string{
-        return $this->firstName;}
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
 
-    public function getLastName(): string{
-        return $this->lastName;}
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
 }

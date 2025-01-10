@@ -7,24 +7,30 @@ use App\UUID;
 class CommentsRepository implements CommentsRepositoryInterface
 {
   public function __construct(
-    private \PDO $connection) {}
+    private \PDO $connection
+  ) {}
+
   public function save(Comment $comment): void
   {
     $statement = $this->connection->prepare(
       'INSERT INTO comments (uuid, post_uuid, author_uuid, text)
-            VALUES (:uuid, :post_uuid, :author_uuid, :text)');
+            VALUES (:uuid, :post_uuid, :author_uuid, :text)'
+    );
+
     $statement->execute([
       ':uuid' => (string)$comment->getUuid(),
       ':post_uuid' => (string)$comment->getPostUuid(),
       ':author_uuid' => (string)$comment->getAuthorUuid(),
-      ':text' => $comment->getText(),
+      ':text' => $comment->getContent(),
     ]);
   }
 
   public function get(Uuid $uuid): Comment
   {
     $statement = $this->connection->prepare(
-      'SELECT * FROM comments WHERE uuid = :uuid');
+      'SELECT * FROM comments WHERE uuid = :uuid'
+    );
+
     $statement->execute([
       ':uuid' => (string)$uuid,
     ]);

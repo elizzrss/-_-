@@ -12,30 +12,34 @@ class CommentsRepositoryTest extends TestCase
   protected function setUp(): void
   {
     $this->pdo = new PDO('sqlite:' . __DIR__ . '/../../database.sqlite');
-    $this->pdo->exec('DELETE FROM comments');
+    $this->pdo->exec('DELETE FROM comments WHERE uuid = "00000000-0000-0000-0000-000000000001"');
     $this->repository = new CommentsRepository($this->pdo);
   }
 
-  public function testItSavesCommentToDatabase(): void
+  public function testItSavesCommentToRepository(): void
   {
+    $testUuid = new Uuid('00000000-0000-0000-0000-000000000001');
+    $postUuid = new Uuid('00000000-0000-0000-0000-000000000002');
+    $authorUuid = new Uuid('00000000-0000-0000-0000-000000000003');
     $comment = new Comment(
-      Uuid::random(),
-      Uuid::random(),
-      Uuid::random(),
+      $testUuid,
+      $postUuid,
+      $authorUuid,
       'Тестовый комментарий'
     );
+
     $this->repository->save($comment);
     $statement = $this->pdo->prepare(
       'SELECT * FROM comments WHERE uuid = :uuid'
     );
     $statement->execute([
-      ':uuid' => (string)$comment->getUuid(),
+      ':uuid' => (string)$testUuid,
     ]);
     $result = $statement->fetch(PDO::FETCH_ASSOC);
-    $this->assertEquals((string)$comment->getUuid(), $result['uuid']);
-    $this->assertEquals((string)$comment->getPostUuid(), $result['post_uuid']);
-    $this->assertEquals((string)$comment->getAuthorUuid(), $result['author_uuid']);
-    $this->assertEquals($comment->getText(), $result['text']);
+    $this->assertEquals((string)$testUuid, $result['uuid']);
+    $this->assertEquals((string)$postUuid, $result['post_uuid']);
+    $this->assertEquals((string)$authorUuid, $result['author_uuid']);
+    $this->assertEquals('Тестовый комментарий', $result['text']);
   }
 
   public function testItFindsCommentByUuid(): void
@@ -51,7 +55,7 @@ class CommentsRepositoryTest extends TestCase
     $this->assertEquals($uuid, $comment->getUuid());
     $this->assertEquals($postUuid, $comment->getPostUuid());
     $this->assertEquals($authorUuid, $comment->getAuthorUuid());
-    $this->assertEquals('Текст комментария', $comment->getText());
+    $this->assertEquals('Текст комментария', $comment->getContent());
   }
 
   public function testItThrowsExceptionWhenCommentNotFound(): void
