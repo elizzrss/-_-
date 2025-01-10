@@ -1,17 +1,14 @@
 {
-	"name": "itrvb/less3",
+	"name": "app/blog",
 	"autoload": {
 		"psr-4": {
-			"less3\\": "src/"
+			"App\\": "src/"
 		}
 	},
-	"authors": [
-		{
-			"name": "elizzrss",
-			"email": "korolkova.elizaveta4@gmail.com"
-		}
-	],
 	"require": {
-		"fakerphp/faker": "^1.23"
+		"symfony/polyfill-uuid": "^1.28"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^10.5"
 	}
 }

@@ -1,12 +1,32 @@
 <?php
-
+namespace App;
 class Comment
 {
-    public int $id;
+    public function __construct(
+        private UUID $uuid,
+        private UUID $postUuid,
+        private UUID $authorUuid,
+        private string $text
+    ) {
+    }
 
-    public int $authorId;
+    public function getUuid(): UUID
+    {
+        return $this->uuid;
+    }
 
-    public int $postId;
+    public function getPostUuid(): UUID
+    {
+        return $this->postUuid;
+    }
 
-    public string $text;
+    public function getAuthorUuid(): UUID
+    {
+        return $this->authorUuid;
+    }
+
+    public function getContent(): string
+    {
+        return $this->text;
+    }
 }

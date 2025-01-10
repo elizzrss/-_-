@@ -1,15 +1,32 @@
 <?php
-
-namespace Itrvb\less3;
-
+namespace App;
 class Post
 {
-    public int $id;
+    public function __construct(
+        private UUID $uuid,
+        private UUID $authorUuid,
+        private string $title,
+        private string $text
+    ) {
+    }
 
-    public int $authorId;
+    public function getUuid(): UUID
+    {
+        return $this->uuid;
+    }
 
-    public string $title;
+    public function getAuthorUuid(): UUID
+    {
+        return $this->authorUuid;
+    }
 
-    public string $text;
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getContent(): string
+    {
+        return $this->text;
+    }
 }
-
